@@ -5,6 +5,8 @@ experience with modern Java, standard-library APIs, JUnit, Gradle, and an
 AI-assisted development workflow. The project targets Java 25 and uses JUnit
 Jupiter.
 
+[![Java CI with Gradle](https://github.com/otto-horvath/jvm-exercises/actions/workflows/gradle.yml/badge.svg?branch=master)](https://github.com/otto-horvath/jvm-exercises/actions/workflows/gradle.yml)
+
 ## The five-exercise proposal
 
 The exercises build from everyday data transformations toward concurrency and
