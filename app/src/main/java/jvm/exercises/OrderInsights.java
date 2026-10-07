@@ -12,12 +12,9 @@ public final class OrderInsights {
         return orders.stream()
                 .collect(Collectors.groupingBy(
                         Order::customer,
-                        Collectors.reducing(
-                                BigDecimal.ZERO,
-                                order -> order.lines().stream()
-                                        .map(OrderLine::revenue)
-                                        .reduce(BigDecimal.ZERO, BigDecimal::add),
-                                BigDecimal::add)));
+                        Collectors.mapping(
+                                Order::revenue,
+                                Collectors.reducing(BigDecimal.ZERO, BigDecimal::add))));
     }
 
     public List<ProductSales> topProducts(List<Order> orders, int limit) {
