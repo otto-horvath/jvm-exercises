@@ -32,10 +32,13 @@ by units sold, and calculate average order value.
 Model standard, express, and international shipments and calculate their costs
 under different rules.
 
+[What we’re learning and practical examples: sealed types](docs/sealed-types-practical-guide.md)
+
 **What you’ll learn**
 
 - Model a closed set of alternatives with a sealed interface.
 - Use records for shipment data.
+- Represent validated positive weights with a value type.
 - Use pattern matching in `switch` to handle each permitted shipment type.
 - Write tests for boundaries and ensure new alternatives require deliberate
   handling.
