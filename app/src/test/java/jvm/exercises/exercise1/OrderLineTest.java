@@ -16,9 +16,7 @@ class OrderLineTest {
 
     @Test
     void rejectsNonPositiveQuantity() {
-        assertThrows(IllegalArgumentException.class,
-                () -> new OrderLine("Coffee", 0, new BigDecimal("2.50")));
-        assertThrows(IllegalArgumentException.class,
-                () -> new OrderLine("Coffee", -1, new BigDecimal("2.50")));
+        assertThrows(IllegalArgumentException.class, () -> new OrderLine("Coffee", 0, new BigDecimal("2.50")));
+        assertThrows(IllegalArgumentException.class, () -> new OrderLine("Coffee", -1, new BigDecimal("2.50")));
     }
 }

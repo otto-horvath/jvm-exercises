@@ -41,16 +41,20 @@ class LogLineParserTest {
 
     @Test
     void parsesEveryLevel() {
-        assertEquals(Level.TRACE, parser.parse("2026-10-10T13:45:12Z TRACE [x] t").level());
-        assertEquals(Level.DEBUG, parser.parse("2026-10-10T13:45:12Z DEBUG [x] d").level());
+        assertEquals(
+                Level.TRACE, parser.parse("2026-10-10T13:45:12Z TRACE [x] t").level());
+        assertEquals(
+                Level.DEBUG, parser.parse("2026-10-10T13:45:12Z DEBUG [x] d").level());
         assertEquals(Level.INFO, parser.parse("2026-10-10T13:45:12Z INFO [x] i").level());
         assertEquals(Level.WARN, parser.parse("2026-10-10T13:45:12Z WARN [x] w").level());
-        assertEquals(Level.ERROR, parser.parse("2026-10-10T13:45:12Z ERROR [x] e").level());
+        assertEquals(
+                Level.ERROR, parser.parse("2026-10-10T13:45:12Z ERROR [x] e").level());
     }
 
     @Test
     void parsesLevelCaseInsensitively() {
-        assertEquals(Level.WARN, parser.parse("2026-10-10T13:45:12Z warn [x] hi").level());
+        assertEquals(
+                Level.WARN, parser.parse("2026-10-10T13:45:12Z warn [x] hi").level());
     }
 
     @Test
@@ -83,56 +87,48 @@ class LogLineParserTest {
 
     @Test
     void rejectsInvalidTimestamp() {
-        assertThrows(LogParseException.class,
-                () -> parser.parse("not-a-timestamp INFO [CheckoutService] hi"));
+        assertThrows(LogParseException.class, () -> parser.parse("not-a-timestamp INFO [CheckoutService] hi"));
     }
 
     @Test
     void rejectsTimestampWithoutOffset() {
-        assertThrows(LogParseException.class,
-                () -> parser.parse("2026-10-10T13:45:12 INFO [CheckoutService] hi"));
+        assertThrows(LogParseException.class, () -> parser.parse("2026-10-10T13:45:12 INFO [CheckoutService] hi"));
     }
 
     @Test
     void rejectsUnknownLevel() {
-        assertThrows(LogParseException.class,
-                () -> parser.parse("2026-10-10T13:45:12Z LOUD [CheckoutService] hi"));
+        assertThrows(LogParseException.class, () -> parser.parse("2026-10-10T13:45:12Z LOUD [CheckoutService] hi"));
     }
 
     @Test
     void rejectsMissingLogger() {
-        assertThrows(LogParseException.class,
-                () -> parser.parse("2026-10-10T13:45:12Z INFO hi"));
+        assertThrows(LogParseException.class, () -> parser.parse("2026-10-10T13:45:12Z INFO hi"));
     }
 
     @Test
     void rejectsUnclosedLoggerBracket() {
-        assertThrows(LogParseException.class,
-                () -> parser.parse("2026-10-10T13:45:12Z INFO [CheckoutService hi"));
+        assertThrows(LogParseException.class, () -> parser.parse("2026-10-10T13:45:12Z INFO [CheckoutService hi"));
     }
 
     @Test
     void rejectsEmptyLogger() {
-        assertThrows(LogParseException.class,
-                () -> parser.parse("2026-10-10T13:45:12Z INFO [] hi"));
+        assertThrows(LogParseException.class, () -> parser.parse("2026-10-10T13:45:12Z INFO [] hi"));
     }
 
     @Test
     void rejectsMissingMessage() {
-        assertThrows(LogParseException.class,
-                () -> parser.parse("2026-10-10T13:45:12Z INFO [CheckoutService]"));
+        assertThrows(LogParseException.class, () -> parser.parse("2026-10-10T13:45:12Z INFO [CheckoutService]"));
     }
 
     @Test
     void rejectsUnclosedCorrelationId() {
-        assertThrows(LogParseException.class,
-                () -> parser.parse("2026-10-10T13:45:12Z INFO [CheckoutService] (req-42 hi"));
+        assertThrows(
+                LogParseException.class, () -> parser.parse("2026-10-10T13:45:12Z INFO [CheckoutService] (req-42 hi"));
     }
 
     @Test
     void reportsOffendingLineAndReason() {
-        LogParseException exception = assertThrows(LogParseException.class,
-                () -> parser.parse("bad line"));
+        LogParseException exception = assertThrows(LogParseException.class, () -> parser.parse("bad line"));
 
         assertEquals("bad line", exception.line());
         assertFalse(exception.reason().isBlank());
@@ -140,11 +136,8 @@ class LogLineParserTest {
 
     @Test
     void parseAllSkipsBlankLines() {
-        List<LogEvent> events = parser.parseAll(List.of(
-                "2026-10-10T13:45:12Z INFO [A] first",
-                "",
-                "   ",
-                "2026-10-10T13:45:13Z ERROR [B] second"));
+        List<LogEvent> events = parser.parseAll(
+                List.of("2026-10-10T13:45:12Z INFO [A] first", "", "   ", "2026-10-10T13:45:13Z ERROR [B] second"));
 
         assertEquals(2, events.size());
         assertEquals("first", events.get(0).message());
@@ -154,11 +147,10 @@ class LogLineParserTest {
 
     @Test
     void parseAllStopsAtFirstMalformedLine() {
-        LogParseException exception = assertThrows(LogParseException.class,
+        LogParseException exception = assertThrows(
+                LogParseException.class,
                 () -> parser.parseAll(List.of(
-                        "2026-10-10T13:45:12Z INFO [A] ok",
-                        "garbage line",
-                        "2026-10-10T13:45:13Z INFO [B] still ok")));
+                        "2026-10-10T13:45:12Z INFO [A] ok", "garbage line", "2026-10-10T13:45:13Z INFO [B] still ok")));
 
         assertEquals("garbage line", exception.line());
     }

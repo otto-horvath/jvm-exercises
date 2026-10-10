@@ -8,7 +8,6 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 public final class LogLineParser {
     private static final String WHITESPACE = "\\s+";
     private static final String LINE_START = "^\\s*";
@@ -17,20 +16,21 @@ public final class LogLineParser {
     private static final String LEVEL = "(?<level>\\S+)";
     private static final String LOGGER = "\\[(?<logger>[^\\]]+)]";
     private static final String MESSAGE = "(?<message>\\S(?:.*\\S)?)";
-    private static final String OPTIONAL_CORRELATION_ID =
-            "(?:" + WHITESPACE + "\\((?<correlationId>[^)]+)\\))?";
+    private static final String OPTIONAL_CORRELATION_ID = "(?:" + WHITESPACE + "\\((?<correlationId>[^)]+)\\))?";
 
-    private static final Pattern LOG_LINE_PATTERN = Pattern.compile(String.join("", List.of(
-            LINE_START,
-            TIMESTAMP,
-            WHITESPACE,
-            LEVEL,
-            WHITESPACE,
-            LOGGER,
-            OPTIONAL_CORRELATION_ID,
-            WHITESPACE,
-            MESSAGE,
-            LINE_END)));
+    private static final Pattern LOG_LINE_PATTERN = Pattern.compile(String.join(
+            "",
+            List.of(
+                    LINE_START,
+                    TIMESTAMP,
+                    WHITESPACE,
+                    LEVEL,
+                    WHITESPACE,
+                    LOGGER,
+                    OPTIONAL_CORRELATION_ID,
+                    WHITESPACE,
+                    MESSAGE,
+                    LINE_END)));
 
     public LogEvent parse(String line) {
         if (line == null || line.isBlank()) {
@@ -71,9 +71,6 @@ public final class LogLineParser {
     }
 
     public List<LogEvent> parseAll(List<String> lines) {
-        return lines.stream()
-                .filter(line -> !line.isBlank())
-                .map(this::parse)
-                .toList();
+        return lines.stream().filter(line -> !line.isBlank()).map(this::parse).toList();
     }
 }

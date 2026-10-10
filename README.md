@@ -87,19 +87,24 @@ Read a CSV expense file and print spending summaries by category and month.
 
 ## Working with the project
 
-Install a Java 25 JDK and use the Gradle wrapper from PowerShell:
+Install a Java 25 JDK and use the Gradle wrapper (`./gradlew` on macOS/Linux,
+`.\gradlew.bat` on Windows):
 
-```powershell
-.\gradlew.bat test
+```shell
+./gradlew test
 ```
 
 Run one test class while working on an exercise:
 
-```powershell
-.\gradlew.bat test --tests jvm.exercises.exercise1.OrderInsightsTest
+```shell
+./gradlew test --tests jvm.exercises.exercise1.OrderInsightsTest
 ```
 
-JUnit Jupiter is configured for tests. A useful AI-assisted loop is to ask
-Copilot for edge cases or one hint at a time, write a failing test, implement
-the behavior yourself, run the focused test, and then ask Copilot to review
-your implementation for missed cases.
+JUnit Jupiter is configured for tests. Code is formatted with
+[Spotless](https://github.com/diffplug/spotless) using Palantir Java Format;
+run `./gradlew spotlessApply` to format and `./gradlew spotlessCheck` to
+verify, and CI fails if a file is unformatted.
+
+A useful AI-assisted loop is to ask Copilot for edge cases or one hint at a
+time, write a failing test, implement the behavior yourself, run the focused
+test, and then ask Copilot to review your implementation for missed cases.

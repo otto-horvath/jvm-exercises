@@ -91,6 +91,13 @@ The shipment records are final data carriers that implement the interface.
 `WeightKg` is another record, with a constructor that enforces the shared
 positive-and-finite weight rule before a shipment can contain that value.
 
+Not every closed set needs to be sealed. International shipping distinguishes
+standard and remote regions, and that set is modeled with the `ShippingRegion`
+enum instead of another sealed hierarchy. An enum says "one of these named
+constants" directly, and it carries the per-region surcharge as data, so the
+calculator multiplies the international rate by `region.surcharge()` rather
+than switching on a string.
+
 Use an ordinary interface instead when extension is the goal. Sealed types
 aren't a replacement for interfaces generally; they're a way to express a
 closed set of variants when that constraint benefits the design.

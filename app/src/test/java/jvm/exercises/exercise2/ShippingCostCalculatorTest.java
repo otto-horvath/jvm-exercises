@@ -24,10 +24,17 @@ class ShippingCostCalculatorTest {
     }
 
     @Test
-    void calculatesInternationalShippingCostWithRegionalSurcharge() {
-        Shipment international = new InternationalShipment("Tokyo", new WeightKg(4.0), "remote");
+    void calculatesInternationalShippingCostForStandardRegion() {
+        Shipment international = new InternationalShipment("Toronto", new WeightKg(4.0), ShippingRegion.STANDARD);
 
         assertEquals(new BigDecimal("52.00"), calculator.calculate(international));
+    }
+
+    @Test
+    void appliesRegionalSurchargeForRemoteRegion() {
+        Shipment international = new InternationalShipment("Tokyo", new WeightKg(4.0), ShippingRegion.REMOTE);
+
+        assertEquals(new BigDecimal("65.00"), calculator.calculate(international));
     }
 
     @Test
