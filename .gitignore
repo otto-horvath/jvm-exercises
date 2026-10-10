@@ -7,3 +7,12 @@ build
 # Ignore IDE/compiler output directories and Java bytecode
 bin/
 *.class
+
+# Ignore Eclipse project files
+.classpath
+.project
+.settings/
+
+# Ignore IntelliJ IDEA project files
+.idea/
+*.iml
