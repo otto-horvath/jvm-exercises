@@ -1,4 +1,4 @@
-package jvm.exercises;
+package jvm.exercises.exercise2;
 
 import java.util.Objects;
 

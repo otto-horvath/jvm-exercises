@@ -1,4 +1,4 @@
-package jvm.exercises;
+package jvm.exercises.exercise1;
 
 import java.math.BigDecimal;
 import java.util.Objects;

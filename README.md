@@ -94,7 +94,7 @@ Install a Java 25 JDK and use the Gradle wrapper from PowerShell:
 Run one test class while working on an exercise:
 
 ```powershell
-.\gradlew.bat test --tests jvm.exercises.OrderInsightsTest
+.\gradlew.bat test --tests jvm.exercises.exercise1.OrderInsightsTest
 ```
 
 JUnit Jupiter is configured for tests. A useful AI-assisted loop is to ask

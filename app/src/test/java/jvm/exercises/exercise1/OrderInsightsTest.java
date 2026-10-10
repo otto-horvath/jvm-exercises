@@ -1,4 +1,4 @@
-package jvm.exercises;
+package jvm.exercises.exercise1;
 
 import org.junit.jupiter.api.Test;
 

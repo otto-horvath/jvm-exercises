@@ -1,4 +1,4 @@
-package jvm.exercises;
+package jvm.exercises.exercise2;
 
 public record WeightKg(double value) {
     public WeightKg {
