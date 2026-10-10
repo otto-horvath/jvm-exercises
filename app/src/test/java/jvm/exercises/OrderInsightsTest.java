@@ -40,6 +40,16 @@ class OrderInsightsTest {
     }
 
     @Test
+    void roundsAverageToTwoDecimalPlaces() {
+        List<Order> wholeUnitPrices = List.of(
+                new Order("Ava", List.of(new OrderLine("Coffee", 1, money("10")))),
+                new Order("Ava", List.of(new OrderLine("Coffee", 1, money("10")))),
+                new Order("Ava", List.of(new OrderLine("Coffee", 1, money("11")))));
+
+        assertEquals(money("10.33"), insights.averageOrderValue(wholeUnitPrices));
+    }
+
+    @Test
     void returnsEmptyResultsForNoOrders() {
         assertEquals(Map.of(), insights.revenueByCustomer(List.of()));
         assertEquals(List.of(), insights.topProducts(List.of(), 3));

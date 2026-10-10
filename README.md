@@ -18,6 +18,8 @@ guiding the behavior.
 Given a list of customer orders, calculate revenue by customer, rank products
 by units sold, and calculate average order value.
 
+[What we’re learning and practical examples: streams and collectors](docs/streams-and-collectors-practical-guide.md)
+
 **What you’ll learn**
 
 - Use records for concise immutable data models.
@@ -27,7 +29,7 @@ by units sold, and calculate average order value.
 - Make ordering and tie-breaking behavior explicit with `Comparator`.
 - Handle empty stream results with `Optional` and define a rounding policy.
 
-### 2. Shipping cost calculator
+### 2. Shipping cost calculator — solved
 
 Model standard, express, and international shipments and calculate their costs
 under different rules.

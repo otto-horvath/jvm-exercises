@@ -8,6 +8,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public final class OrderInsights {
+    private static final Comparator<ProductSales> RANKING =
+            Comparator.comparingInt(ProductSales::unitsSold).reversed()
+                    .thenComparing(ProductSales::product);
+
     public Map<String, BigDecimal> revenueByCustomer(List<Order> orders) {
         return orders.stream()
                 .collect(Collectors.groupingBy(
@@ -25,20 +29,21 @@ public final class OrderInsights {
                         Collectors.summingInt(OrderLine::quantity)))
                 .entrySet().stream()
                 .map(entry -> new ProductSales(entry.getKey(), entry.getValue()))
-                .sorted(Comparator.comparingInt(ProductSales::unitsSold)
-                        .reversed()
-                        .thenComparing(ProductSales::product))
+                .sorted(RANKING)
                 .limit(limit)
                 .toList();
         }
 
     public BigDecimal averageOrderValue(List<Order> orders) {
-        return orders.stream()
+        if (orders.isEmpty()) {
+            return BigDecimal.ZERO;
+        }
+        
+        BigDecimal total = orders.stream()
                 .map(Order::revenue)
-                .reduce(BigDecimal::add)
-                .map(total -> total.divide(
-                        BigDecimal.valueOf(orders.size()),
-                        RoundingMode.HALF_UP))
-                .orElse(BigDecimal.ZERO);
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        return total.divide(
+                BigDecimal.valueOf(orders.size()), 2, RoundingMode.HALF_UP);
         }
 }
