@@ -45,10 +45,12 @@ under different rules.
 - Write tests for boundaries and ensure new alternatives require deliberate
   handling.
 
-### 3. Log-line parser
+### 3. Log-line parser — solved
 
 Parse timestamped log lines into structured events and clearly report
 malformed input.
+
+[What we’re learning and practical examples: regex-based parsing](docs/regex-log-parsing-practical-guide.md)
 
 **What you’ll learn**
 
