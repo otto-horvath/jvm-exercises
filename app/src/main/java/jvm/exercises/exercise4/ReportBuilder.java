@@ -17,21 +17,21 @@ public final class ReportBuilder implements AutoCloseable {
             throw new IllegalStateException("ReportBuilder is closed");
         }
 
-        List<Pending> pending = tasks.stream()
+        List<Pending> pendings = tasks.stream()
                 .map(task -> new Pending(task.title(), executor.submit(task.body())))
                 .toList();
 
-        List<ReportSection> sections = new ArrayList<>(pending.size());
-        for (int i = 0; i < pending.size(); i++) {
-            Pending current = pending.get(i);
+        List<ReportSection> sections = new ArrayList<>(pendings.size());
+        for (int i = 0; i < pendings.size(); i++) {
+            Pending current = pendings.get(i);
             try {
                 sections.add(new ReportSection(current.title(), current.future().get()));
             } catch (ExecutionException e) {
-                cancelRemaining(pending, i);
+                cancelRemaining(pendings, i);
                 throw new ReportBuildException(current.title(), e.getCause());
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-                cancelRemaining(pending, i);
+                cancelRemaining(pendings, i);
                 throw new ReportBuildException(current.title(), e);
             }
         }
