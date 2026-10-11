@@ -217,6 +217,80 @@ as you go:
 ./gradlew test --tests jvm.exercises.exercise4.ReportBuilderTest
 ```
 
+## Appendix: the check-then-act race (TOCTOU)
+
+The `build` method guards submission with a state check:
+
+```java
+if (executor.isShutdown()) {
+    throw new IllegalStateException("ReportBuilder is closed");
+}
+// ... executor.submit(task.body()) ...
+```
+
+That is two separate steps on two separate calls: the *check* reads the
+executor's state, and the *use* submits work later. This is a TOCTOU race —
+"time of check to time of use". Another thread can run `close()` between them,
+and then the `submit` lands on a shut-down executor and throws
+`RejectedExecutionException` instead of the intended `IllegalStateException`.
+
+It is theoretical in this exercise because nobody calls `close()` while
+`build` runs, but the pattern matters in real systems. The mitigation is to
+make the use the check and let the executor speak for itself:
+
+```java
+try {
+    executor.submit(task.body());
+} catch (RejectedExecutionException e) {
+    throw new IllegalStateException("ReportBuilder is closed", e);
+}
+```
+
+Now there is no window between inspection and use: `submit` either takes the
+work or rejects it, and a rejection is translated into the domain's own error.
+`isShutdown()` is a hint; `RejectedExecutionException` is the authoritative
+answer.
+
+## Appendix: what StructuredTaskScope will change
+
+`ExecutorService` plus `Future` is the "free-range" model: tasks are submitted
+and live for as long as they take. Java's newer structured-concurrency model
+ties every subtask to the scope it was created in, like frames in a call
+stack. A scope and all of its work must finish before the enclosing block
+returns:
+
+```java
+try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+    List<Future<String>> futures = tasks.stream()
+            .map(t -> scope.fork(t.body()))
+            .toList();
+
+    scope.join();                    // wait for every fork
+    scope.throwIfFailed(e -> new ReportBuildException("task", e));
+
+    return new Report(IntStream.range(0, tasks.size())
+            .mapToObj(i -> new ReportSection(tasks.get(i).title(), futures.get(i).getNow()))
+            .toList());
+}
+```
+
+The gains over the executor approach:
+
+- **Automatic lifetime.** `close()` (try-with-resources) joins every fork, so
+  there is no executor to own, no `close()` to implement, and work cannot
+  outlive the scope.
+- **Fail-fast for free.** `ShutdownOnFailure` marks the scope failed at the
+  first exception and interrupts the still-running forks — the same behaviour
+  as the `cancelRemaining` helper, built in.
+- **Failures throw directly.** `throwIfFailed` surfaces the task's own
+  exception through an exception mapper, so there is no `ExecutionException`
+  to unwrap.
+
+It is not used in this exercise because `StructuredTaskScope` is still a
+preview feature in Java 25 and the scaffold tests target the `ExecutorService`
++ `Future` API. Treat it as the likely idiomatic replacement once it becomes
+final.
+
 ## Further reading
 
 - [JEP 444: Virtual Threads](https://openjdk.org/jeps/444)
@@ -226,5 +300,6 @@ as you go:
 - [`Callable`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/concurrent/Callable.html)
 - [`ExecutionException`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/concurrent/ExecutionException.html)
 - [`AutoCloseable`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/AutoCloseable.html)
+- [`StructuredTaskScope`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/concurrent/StructuredTaskScope.html)
 - [`Record` (JEP 395)](https://openjdk.org/jeps/395)
 - [`CountDownLatch`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/concurrent/CountDownLatch.html)
