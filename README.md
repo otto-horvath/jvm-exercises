@@ -60,9 +60,11 @@ malformed input.
   and format edge cases.
 - Use `Optional` when a value may genuinely be absent.
 
-### 4. Concurrent report builder
+### 4. Concurrent report builder — solved
 
 Run independent report tasks concurrently and combine their results.
+
+[What we’re learning and practical examples: concurrent report building](docs/concurrent-report-builder-practical-guide.md)
 
 **What you’ll learn**
 
