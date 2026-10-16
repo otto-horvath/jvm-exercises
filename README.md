@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/assets/logo.svg" alt="jvm-exercises: Remo the chameleon on a coffee cup" width="720">
+</p>
+
 # Modern Java Evening Exercises
 
 A test-first set of five small Java exercises for refreshing Java 8-era
