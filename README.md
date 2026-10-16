@@ -91,6 +91,8 @@ Read a CSV expense file and print spending summaries by category and month.
 
 ## Working with the project
 
+Celebrate the completed five-exercise series in the [series status page](docs/series-status.md).
+
 Install a Java 25 JDK and use the Gradle wrapper (`./gradlew` on macOS/Linux,
 `.\gradlew.bat` on Windows):
 
