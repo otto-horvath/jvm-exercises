@@ -77,6 +77,8 @@ Run independent report tasks concurrently and combine their results.
 
 Read a CSV expense file and print spending summaries by category and month.
 
+[What we’re learning and practical examples: expense-file summary CLI](docs/expense-file-summary-cli-practical-guide.md)
+
 **What you’ll learn**
 
 - Work with files using `Path` and `Files`.
